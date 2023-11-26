@@ -1,0 +1,47 @@
+import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
+
+# Carregar os dados (substitua 'seu_arquivo.csv' pelo nome do seu arquivo)
+df = pd.read_csv('seu_arquivo.csv')
+
+# Exercício 1: Tabela de Estatística Descritiva
+estatistica_descritiva = df.describe()
+
+# Exercício 2: Gráfico de Barras para Agrupamento por Sexo e Situação de Coabitação dos Pais
+grafico_barras = px.bar(df, x='Sex', color='Pstatus', title='Agrupamento por Sexo e Situação de Coabitação dos Pais')
+
+# Exercício 3: Gráfico de Pizza para Contagem de Alunos sem Aulas Extras e com Interesse em Curso Superior
+dados_pizza = df[(df['activities'] == 'no') & (df['higher'] == 'yes')]
+grafico_pizza = px.pie(dados_pizza, names='sex', title='Contagem de Alunos sem Aulas Extras e com Interesse em Curso Superior')
+
+# Exercício 4: Gráfico de Barras para Média das Notas G1 e G2 Agrupado por Sexo e Situação de Coabitação dos Pais
+df['Pais_Separados'] = df['Pstatus'].apply(lambda x: 'Separados' if x == 'A' else 'Morando Juntos')
+grafico_medias = px.bar(df, x='Sex', y=['G1', 'G2'], color='Pais_Separados', barmode='group', title='Média das Notas G1 e G2 por Sexo e Situação dos Pais')
+
+# Exercício 5 e 6: Tabela com Contagem e Média das Notas G1 e G2 para Dois Grupos
+grupo1 = df[df['Pais_Separados'] == 'Morando Juntos']
+grupo2 = df[df['Pais_Separados'] == 'Separados']
+
+tabela_contagem_grupo1 = grupo1[['sex', 'schoolsup', 'paid', 'higher', 'address']].value_counts().reset_index()
+tabela_contagem_grupo2 = grupo2[['sex', 'schoolsup', 'paid', 'higher', 'address']].value_counts().reset_index()
+
+tabela_medias_grupo1 = grupo1.groupby(['sex', 'schoolsup', 'paid', 'higher', 'address'])[['G1', 'G2']].mean().reset_index()
+tabela_medias_grupo2 = grupo2.groupby(['sex', 'schoolsup', 'paid', 'higher', 'address'])[['G1', 'G2']].mean().reset_index()
+
+# Exercício 7: Filtro para Alunos na Zona Rural e em Relacionamento Amoroso
+dados_filtrados = df[(df['address'] == 'R') & (df['romantic'] == 'yes')]
+
+# Gráfico de Barras Agrupado por Relacionamento e Sexo para Notas G1 e G2
+grafico_relacionamento = px.bar(dados_filtrados, x='romantic', y=['G1', 'G2'], color='sex', barmode='group', title='Média das Notas G1 e G2 para Alunos na Zona Rural em Relacionamento Amoroso')
+
+# Exibir os gráficos
+estatistica_descritiva.to_html('estatistica_descritiva.html')
+grafico_barras.show()
+grafico_pizza.show()
+grafico_medias.show()
+tabela_contagem_grupo1.to_html('tabela_contagem_grupo1.html')
+tabela_contagem_grupo2.to_html('tabela_contagem_grupo2.html')
+tabela_medias_grupo1.to_html('tabela_medias_grupo1.html')
+tabela_medias_grupo2.to_html('tabela_medias_grupo2.html')
+grafico_relacionamento.show()
