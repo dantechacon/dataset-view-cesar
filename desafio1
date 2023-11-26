@@ -1,0 +1,69 @@
+//dataset escolhido foi https://ai2-semanticscholar-cord-19.s3-us-west-2.amazonaws.com/2020-04-10/changelog
+
+import matplotlib.pyplot as plt
+import pandas as pd
+
+# Criando um DataFrame com os dados fornecidos
+data = {
+    '2020-03-20': 44220,
+    '2020-03-27': 45774,
+    '2020-04-03': 47298,
+    '2020-04-10': 51078
+}
+
+# Convertendo para DataFrame
+df = pd.DataFrame(list(data.items()), columns=['Data', 'Total de Registros'])
+
+# Visualizando o crescimento usando Matplotlib
+plt.figure(figsize=(10, 6))
+plt.plot(df['Data'], df['Total de Registros'], marker='o', color='green', linestyle='-', linewidth=2)
+plt.title('Crescimento no Número Total de Registros ao Longo do Tempo')
+plt.xlabel('Data')
+plt.ylabel('Total de Registros')
+plt.grid(True)
+plt.show()
+
+import seaborn as sns
+
+# Criando um DataFrame simulado para o número de registros por tipo de licença
+dados_licenca = {
+    'custom_license': [15533, 4218, 2541, 3081],
+    'comm_use_subset': [128, 210, 70, 174],
+    'noncomm_use_subset': [385, 6, 54, 130],
+    'biorxiv_medrxiv': [110, 194, 348, 353]
+}
+
+df_licenca = pd.DataFrame(dados_licenca, index=['2020-03-20', '2020-03-27', '2020-04-03', '2020-04-10'])
+
+# Visualizando a distribuição usando Seaborn
+plt.figure(figsize=(12, 8))
+sns.lineplot(data=df_licenca, dashes=False)
+plt.title('Distribuição do Número de Registros por Tipo de Licença ao Longo do Tempo')
+plt.xlabel('Data')
+plt.ylabel('Número de Registros')
+plt.legend(title='Tipo de Licença', loc='upper left')
+plt.show()
+
+  # Criando um DataFrame simulado para o número de textos completos por fonte (pmc e pdf)
+dados_textos_completos = {
+    'PDF': [885, 9315, 23665, 38124],
+    'PMC': [110, 2093, 13791, 21757]
+}
+
+df_textos_completos = pd.DataFrame(dados_textos_completos, index=['2020-03-20', '2020-03-27', '2020-04-03', '2020-04-10'])
+
+# Visualizando a variação usando Matplotlib
+plt.figure(figsize=(12, 8))
+plt.plot(df_textos_completos['PDF'], marker='o', label='PDF', linestyle='-', linewidth=2)
+plt.plot(df_textos_completos['PMC'], marker='o', label='PMC', linestyle='-', linewidth=2)
+plt.title('Variação no Número de Textos Completos por Fonte ao Longo do Tempo')
+plt.xlabel('Data')
+plt.ylabel('Número de Textos Completos')
+plt.legend(title='Fonte', loc='upper left')
+plt.grid(True)
+plt.show()
+
+
+
+
+
